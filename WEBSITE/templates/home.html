@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Stocking Stuffer{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Welcome to Stocking Stuffer</h1>
+    <p class="lead">Manage your stocks and portfolio with ease.</p>
+    {% if not session.get('user_id') %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary me-2">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-success">Register</a>
+    {% else %}
+        <a href="{{ url_for('portfolio') }}" class="btn btn-primary">Go to Portfolio</a>
+        <a href="{{ url_for('market') }}" class="btn btn-primary">Go to Market</a>
+    {% endif %}
+</div>
+{% endblock %}

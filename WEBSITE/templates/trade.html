@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Trade Confirmation - Stocking Stuffer {{ stock.ticker }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>Confirm Trade: {{ stock.ticker }} - {{ stock.name }}</h2>
+
+    {% if quantity %}
+        {% set total = stock.currentMarketPrice * quantity %}
+        <p>You are about to <strong>{{ action }}</strong> <strong>{{ quantity }}</strong> shares of <strong>{{ stock.ticker }}</strong>.</p>
+        <p>Total Transaction Value: <strong>${{ "%.2f"|format(total) }}</strong></p>
+    {% else %}
+        {% set total = 0 %}
+        <p>Please enter the quantity in Market or Portfolio first.</p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('trade', ticker=stock.ticker) }}" class="mt-4">
+        <input type="hidden" name="quantity" value="{{ quantity }}">
+        <input type="hidden" name="action" value="{{ action }}">
+
+        <button type="submit" class="btn btn-success me-2">Confirm {{ action }}</button>
+        <a href="{{ url_for('portfolio') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
