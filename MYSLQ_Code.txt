@@ -1,0 +1,18 @@
+USE project_stocks;
+
+INSERT INTO StockInventory (name, ticker, quantity, initStockPrice, currentMarketPrice)
+VALUES 
+  ('Apple Inc.', 'AAPL', 1000, 120, 150),
+  ('Tesla Inc.', 'TSLA', 500, 650, 700),
+  ('Kaos Inc.', 'KAOS', 413, 400, 430)
+AS new_stockportfolio
+ON DUPLICATE KEY UPDATE
+  name = new_stock.name,
+  quantity = new_stock.quantity,
+  initStockPrice = new_stock.initStockPrice,
+  currentMarketPrice = new_stock.currentMarketPrice;
+
+SELECT user.id AS user_id, user.username AS user_username, user.password_hash AS user_password_hash, user.funds AS user_funds FROM user;
+
+ALTER TABLE user MODIFY password_hash VARCHAR(512) NOT NULL;
+the code is for the SQL
