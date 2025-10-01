@@ -56,7 +56,8 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
-
+        if 'user_id' in session:
+            return redirect(url_for('profile'))
 
 def admin_required(f):
     @wraps(f)
@@ -68,7 +69,8 @@ def admin_required(f):
             return redirect(url_for('profile'))
         return f(*args, **kwargs)
     return decorated
-
+         if 'user_id' in session:
+            return redirect(url_for('profile'))
 
 @app.route('/')
 def home():
@@ -111,12 +113,13 @@ def login():
             session['user_id'] = user.id
             return redirect(url_for('profile'))
 
-        flash("Invalid credentials.")
-        return redirect(url_for('login'))
+        if not username not password
+           flash("Invalid credentials.")
+           return redirect(url_for('login'))
 
     return render_template('login.html')
 
-
+        
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
