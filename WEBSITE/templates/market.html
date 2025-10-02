@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 {% block title %}Market - StockApp{% endblock %}
 
@@ -41,48 +40,4 @@
         </div>
     {% endif %}
 </div>
-=======
-{% extends "base.html" %}
-{% block title %}Market - StockApp{% endblock %}
-
-{% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Stock Market</h2>
-
-    {% if stocks %}
-        <table class="table table-striped table-hover text-center align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>Ticker</th>
-                    <th>Name</th>
-                    <th>Available Quantity</th>
-                    <th>Current Price ($)</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for stock in stocks %}
-                <tr>
-                    <td style="color: white;"><strong>{{ stock.ticker }}</strong></td>
-                    <td style="color: white;">{{ stock.name }}</td>
-                    <td style="color: white;">{{ stock.quantity }}</td>
-                    <td style="color: white;">${{ "%.2f"|format(stock.currentMarketPrice) }}</td>
-                    <td>
-                        <form method="GET" action="{{ url_for('trade', ticker=stock.ticker) }}">
-                            <input type="number" name="quantity" min="1" max="{{ stock.quantity }}" required class="form-control d-inline w-50 mb-2">
-                            <input type="hidden" name="action" value="BUY">
-                            <button type="submit" class="btn btn-success btn-sm">Buy Stocks</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div class="alert alert-info text-center">
-            No stocks available in the market right now.
-        </div>
-    {% endif %}
-</div>
->>>>>>> 27c92f2dbe5f5aefaafc7311e7c69c62421109b5
 {% endblock %}
