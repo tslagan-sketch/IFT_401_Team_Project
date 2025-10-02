@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Trade Confirmation - Stocking Stuffer {{ stock.ticker }}{% endblock %}
@@ -24,3 +25,52 @@
     </form>
 </div>
 {% endblock %}
+=======
+{% extends "base.html" %}
+
+{% block title %}Trade - {{ stock.ticker }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4 shadow-lg text-center">
+        <h2 class="mb-4">Trade: {{ stock.ticker }} - {{ stock.name }}</h2>
+        <p class="mb-3">
+            Current Price: 
+            <strong>${{ "%.2f"|format(stock.currentMarketPrice) }}</strong>
+        </p>
+
+        {% if owned_qty > 0 %}
+            <p class="text-info">You currently own <strong>{{ owned_qty }}</strong> shares.</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('trade', ticker=stock.ticker) }}">
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input 
+                    type="number" 
+                    id="quantity" 
+                    name="quantity" 
+                    class="form-control w-50 mx-auto" 
+                    min="1"
+                    value="{{ quantity if quantity else '' }}"
+                    required>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" name="action" value="BUY" class="btn btn-success"
+                        {% if action == "SELL" %}disabled{% endif %}>
+                    Buy
+                </button>
+                <button type="submit" name="action" value="SELL" class="btn btn-danger"
+                        {% if action == "BUY" %}disabled{% endif %}>
+                    Sell
+                </button>
+                <a href="{{ url_for('profile') }}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+>>>>>>> 27c92f2dbe5f5aefaafc7311e7c69c62421109b5

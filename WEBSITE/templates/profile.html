@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Profile</h2>
+        <div class="card mb-3">
+            <div class="card-body">
+                <p><strong>Display Name:</strong> {{ current_user.display_name }}</p>
+                <p><strong>Username:</strong> {{ current_user.username }}</p>
+                <p><strong>Email:</strong> {{ current_user.email or "Not set" }}</p>
+                <p><strong>Funds:</strong> ${{ "%.2f"|format(current_user.funds) }}</p>
+                <p><strong>Role:</strong> {{ current_user.role }}</p>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('update_profile') }}" class="mb-3">
+            <div class="mb-2">
+                <input type="text" class="form-control" name="display_name" placeholder="New display name" required>
+            </div>
+            <div class="mb-2">
+                <input type="email" class="form-control" name="email" placeholder="New email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Your Portfolio</h2>
+        {% if current_user.portfolio %}
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="color: white;">Stock</th>
+                        <th style="color: white;">Ticker</th>
+                        <th style="color: white;">Quantity</th>
+                        <th style="color: white;">Current Price</th>
+                        <th style="color: white;">Total Value</th>
+                        <th style="color: white;">Trade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in current_user.portfolio %}
+                        <tr>
+                            <td style="color: white;">{{ p.stock.name }}</td>
+                            <td style="color: white;"><strong>{{ p.stock.ticker }}</strong></td>
+                            <td style="color: white;">{{ p.quantity }}</td>
+                            <td style="color: white;">${{ "%.2f"|format(p.stock.currentMarketPrice) }}</td>
+                            <td style="color: white;">${{ "%.2f"|format(p.stock.currentMarketPrice * p.quantity) }}</td>
+                            <td>
+                                <a href="{{ url_for('trade', ticker=p.stock.ticker) }}" class="btn btn-sm btn-primary">Trade</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You don’t own any stocks yet. Visit the <a href="{{ url_for('market') }}">Market</a> to start trading!</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Admin Panel (only for admin users) -->
+{% if current_user.role == 'admin' %}
+<hr>
+<h2>Admin Panel</h2>
+<div class="row">
+    <div class="col-md-6">
+        <h4>All Users</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="color: white;">Display Name</th>
+                    <th style="color: white;">Username</th>
+                    <th style="color: white;">Role</th>
+                    <th style="color: white;">Promote</th>
+                    <th style="color: white;">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                    <tr>
+                        <td style="color: white;">{{ u.display_name }}</td>
+                        <td style="color: white;">{{ u.username }}</td>
+                        <td style="color: white;">{{ u.role }}</td>
+                        <td>
+                            {% if u.role != 'admin' %}
+                                <form method="POST" action="{{ url_for('promote_user', user_id=u.id) }}">
+                                    <button class="btn btn-sm btn-success">Promote</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" onsubmit="return confirm('Delete this user?');">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <h4>Add New Stock</h4>
+        <form method="POST" action="{{ url_for('add_stock') }}">
+            <div class="mb-2">
+                <label>Stock Name</label>
+                <input type="text" name="stock_name" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label>Ticker</label>
+                <input type="text" name="ticker" class="form-control" maxlength="5" required>
+            </div>
+            <div class="mb-2">
+                <label>Quantity</label>
+                <input type="number" name="quantity" class="form-control" min="1" value="1000" required>
+            </div>
+            <div class="mb-2">
+                <label>Current Price</label>
+                <input type="number" step="0.01" name="price" class="form-control" required>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Add Stock</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<div class="text-center mt-4">
+    <form method="POST" action="{{ url_for('delete_account') }}" onsubmit="return confirm('Are you sure you want to delete your account?');">
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+    </form>
+</div>
+{% endblock %}

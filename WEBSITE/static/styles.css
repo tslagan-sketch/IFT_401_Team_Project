@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
 
 /* General Styles */
@@ -150,3 +151,148 @@ footer {
     font-size: 0.9rem;
     border-top: 1px solid #333;
 }
+=======
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
+body {
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6,
+input, select, table {
+    font-family: 'Outfit', sans-serif;
+}
+
+a {
+    color: #00ffff;
+    text-decoration: none;
+}
+a:hover {
+    color: #00cccc;
+}
+
+.navbar {
+    background-color: #1c1c1c;
+}
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: #fff !important;
+    font-weight: 600;
+}
+.navbar .nav-link:hover {
+    color: #00ffff !important;
+}
+
+.container {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #121212;
+    color: #fff;
+}
+table th, table td {
+    padding: 10px;
+    border: 1px solid #333;
+}
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #1e1e1e;
+}
+.table-hover tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+.card {
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary, .btn-promote {
+    background-color: #00aaff;
+}
+.btn-primary:hover, .btn-promote:hover {
+    background-color: #0088cc;
+}
+
+.btn-success {
+    background-color: #00cc66;
+}
+.btn-success:hover {
+    background-color: #00994d;
+}
+
+.btn-warning {
+    background-color: #ffcc00;
+    color: #000;
+}
+.btn-warning:hover {
+    background-color: #e6b800;
+}
+
+.btn-danger {
+    background-color: #ff4444;
+}
+.btn-danger:hover {
+    background-color: #cc0000;
+}
+
+.btn-secondary {
+    background-color: #555;
+    color: #fff;
+}
+.btn-secondary:hover {
+    background-color: #333;
+}
+
+.profile-delete {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+input, select {
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+input::placeholder {
+    color: #aaa;
+}
+
+footer {
+    background-color: #121212;
+    color: #aaa;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.9rem;
+    border-top: 1px solid #333;
+}
+>>>>>>> 27c92f2dbe5f5aefaafc7311e7c69c62421109b5
