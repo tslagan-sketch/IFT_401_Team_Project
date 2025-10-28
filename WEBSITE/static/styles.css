@@ -7,6 +7,7 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    padding-top: 70px;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -24,6 +25,11 @@ a:hover {
 
 .navbar {
     background-color: #1c1c1c;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
 }
 .navbar .navbar-brand,
 .navbar .nav-link {
@@ -64,7 +70,6 @@ table th, table td {
     margin-bottom: 20px;
 }
 
-/* Buttons */
 .btn {
     border-radius: 6px;
     font-weight: bold;
@@ -140,4 +145,44 @@ footer {
     padding: 15px 0;
     font-size: 0.9rem;
     border-top: 1px solid #333;
+}
+
+.scroll-box {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #1e1e1e;
+}
+
+.scroll-box::-webkit-scrollbar {
+    width: 8px;
+}
+.scroll-box::-webkit-scrollbar-track {
+    background: #1c1c1c;
+}
+.scroll-box::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+.scroll-box::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+.sticky-table {
+    max-height: 400px;
+    overflow-y: auto;
+    display: block;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+}
+
+.sticky-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #1c1c1c;
+    z-index: 2;
+    color: #fff;
 }

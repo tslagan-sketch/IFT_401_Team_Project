@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Calendar{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Stock Market Calendar</h2>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="{{ url_for('calendar') }}" method="POST" class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" name="title" class="form-control" placeholder="Event Title" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="start_date" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="end_date" class="form-control" placeholder="End Date (optional)">
+                </div>
+                <div class="col-md-2">
+                    <select name="event_type" class="form-control">
+                        <option value="event">Event</option>
+                        <option value="closed">Closed</option>
+                        <option value="custom_hours">Custom Hours</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="custom_open_time" class="form-control" placeholder="Open Time">
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="custom_close_time" class="form-control" placeholder="Close Time">
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">Add Event</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+    <div id="calendar"></div>
+
+    <div id="day-details" class="mt-4 card" style="display:none;">
+        <div class="card-body">
+            <h4 id="details-date"></h4>
+            <ul id="details-list"></ul>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+    const detailsEl = document.getElementById('day-details');
+    const detailsDate = document.getElementById('details-date');
+    const detailsList = document.getElementById('details-list');
+
+    const holidays = {{ holidays|tojson }};
+    const events = {{ events_json|tojson }};
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        navLinks: true,
+        selectable: true,
+        events: events,
+        eventClick: function(info) {
+            const startTime = new Date(info.event.start).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            const endTime = info.event.end ? new Date(info.event.end).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
+            alert(`Event: ${info.event.title}\nTime: ${startTime}${endTime ? ' - ' + endTime : ''}`);
+        },
+        dateClick: function(info) {
+            detailsEl.style.display = 'block';
+            detailsDate.textContent = 'Events for ' + info.dateStr;
+            detailsList.innerHTML = '';
+
+            const d = new Date(info.dateStr);
+            const dow = d.getDay();
+
+            if (dow === 5 || dow === 6 || holidays.includes(info.dateStr)) {
+                detailsList.innerHTML = '<li>Market is closed all day</li>';
+            } else {
+                detailsList.innerHTML = '<li>Market Open: 08:00</li><li>Market Close: 17:00</li>';
+            }
+            calendar.getEvents().forEach(ev => {
+                const evDate = ev.startStr.split('T')[0];
+                if (evDate === info.dateStr) {
+                    let timeStr = '';
+                    if (ev.start) {
+                        timeStr += new Date(ev.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    }
+                    if (ev.end) {
+                        timeStr += ' - ' + new Date(ev.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    }
+                    detailsList.innerHTML += `<li>${timeStr ? timeStr + ' ' : ''}${ev.title}</li>`;
+                }
+            });
+        }
+    });
+
+    calendar.render();
+});
+</script>
+{% endblock %}

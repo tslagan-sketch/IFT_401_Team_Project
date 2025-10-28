@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Console{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Admin Console</h2>
+
+    <!-- User Management Section -->
+    <div class="card mb-4">
+        <h4 class="mb-3">User Management</h4>
+        <div class="scroll-box" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th style="color: white;">Display Name</th>
+                        <th style="color: white;">Username</th>
+                        <th style="color: white;">Role</th>
+                        <th style="color: white;">Promote</th>
+                        <th style="color: white;">Delete</th>
+                        <th style="color: white;">Add Funds</th>
+                        <th style="color: white;">Subtract Funds</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td style="color: white;">{{ user.display_name }}</td>
+                        <td style="color: white;">{{ user.username }}</td>
+                        <td style="color: white;">{{ user.role }}</td>
+                        <td>
+                            {% if user.role != 'admin' %}
+                            <form method="POST" action="{{ url_for('promote_user', user_id=user.id) }}">
+                                <button class="btn btn-sm btn-success">Promote</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" onsubmit="return confirm('Delete this user?');">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('add_funds_user', user_id=user.id) }}" class="d-flex gap-1">
+                                <input name="amount" placeholder="$" class="form-control form-control-sm" required type="number" step="0.01">
+                                <button class="btn btn-sm btn-success">Add</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('subtract_funds_user', user_id=user.id) }}" class="d-flex gap-1">
+                                <input name="amount" placeholder="$" class="form-control form-control-sm" required type="number" step="0.01">
+                                <button class="btn btn-sm btn-warning">Sub</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Stock Management Section -->
+    <div class="card mb-4">
+        <h4 class="mb-3">Stock Management</h4>
+        <form method="POST" action="{{ url_for('add_stock_route') }}">
+            <div class="mb-2">
+                <label>Stock Name</label>
+                <input type="text" name="stock_name" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label>Ticker</label>
+                <input type="text" name="ticker" class="form-control" maxlength="10" required>
+            </div>
+            <div class="mb-2">
+                <label>Quantity</label>
+                <input type="number" name="quantity" class="form-control" min="1" value="1000" required>
+            </div>
+            <div class="mb-2">
+                <label>Base Price</label>
+                <input type="number" step="0.01" name="base_price" class="form-control" required>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Add Stock</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Calendar Events Section -->
+    <div class="card mb-4">
+        <h4 class="mb-3">Calendar Events</h4>
+        <form method="POST" action="{{ url_for('calendar_add') }}" class="row g-2 mb-3">
+            <div class="col-md-4">
+                <input type="text" name="title" class="form-control" placeholder="Event Title" required>
+            </div>
+            <input type="hidden" name="description" value="">
+            <div class="col-md-3">
+                <input type="date" name="start_date" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <input type="time" name="start_time" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="end_date" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <input type="time" name="end_time" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Add Event</button>
+            </div>
+        </form>
+
+        <div class="scroll-box" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="color: white;">Title</th>
+                        <th style="color: white;">Start</th>
+                        <th style="color: white;">End</th>
+                        <th style="color: white;">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evt in calendar_events %}
+                    <tr>
+                        <td style="color: white;">{{ evt.title }}</td>
+                        <td style="color: white;">{{ evt.start_datetime.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td style="color: white;">{{ evt.end_datetime.strftime('%Y-%m-%d %H:%M') if evt.end_datetime else '' }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('calendar_remove', event_id=evt.id) }}" onsubmit="return confirm('Remove event?');">
+                                <button class="btn btn-sm btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Admin Actions Section -->
+    <div class="mt-3 text-end">
+        <form method="POST" action="{{ url_for('simulate_fast_ticks') }}" style="display:inline;">
+            <button type="submit" class="btn btn-primary">Simulate Fast Tick</button>
+        </form>
+        <form method="POST" action="{{ url_for('compress_end_of_day') }}" style="display:inline;">
+            <button class="btn btn-secondary">Compress End of Day</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

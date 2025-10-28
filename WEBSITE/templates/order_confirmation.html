@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmation{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Order Confirmation</h2>
+    <div class="card p-3">
+        <p>Order ID: {{ order.id }}</p>
+        <p>Stock: {{ order.stock.ticker }}</p>
+        <p>Action: {{ order.action }}</p>
+        <p>Quantity: {{ order.quantity }}</p>
+        <p>Price per stock: ${{ "%.2f"|format(order.price_per_stock or 0) }}</p>
+        <p>Total: ${{ "%.2f"|format(order.total_amount or 0) }}</p>
+        <p>Status: {{ order.status }}</p>
+        <a href="{{ url_for('profile') }}" class="btn btn-primary">Back to Profile</a>
+    </div>
+</div>
+{% endblock %}

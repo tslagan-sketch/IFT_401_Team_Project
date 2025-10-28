@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Order Preview{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Order Preview</h2>
+    <div class="card p-3">
+        {% if stock %}
+        <p><strong>Stock:</strong> {{ stock.ticker }} - {{ stock.name }}</p>
+        {% else %}
+        <p class="text-danger">Stock not found!</p>
+        {% endif %}
+        
+        <p><strong>Action:</strong> {{ action }}</p>
+        <p><strong>Quantity:</strong> {{ quantity }}</p>
+        
+        {% if total is not none %}
+        <p><strong>Total:</strong> ${{ "%.2f"|format(total) }}</p>
+        {% else %}
+        <p class="text-danger">Total calculation error!</p>
+        {% endif %}
+        
+        <form method="POST" action="{{ url_for('execute_order', ticker=stock.ticker) }}">
+            <input type="hidden" name="action" value="{{ action }}">
+            <input type="hidden" name="quantity" value="{{ quantity }}">
+            <button class="btn btn-success" type="submit">Confirm</button>
+            <a class="btn btn-secondary" href="{{ url_for('trade', ticker=stock.ticker) }}">Back</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

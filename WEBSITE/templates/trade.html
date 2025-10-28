@@ -1,47 +1,36 @@
 {% extends "base.html" %}
-
-{% block title %}Trade - {{ stock.ticker }}{% endblock %}
-
+{% block title %}Trade {{ stock.ticker }}{% endblock %}
 {% block content %}
 <div class="container mt-5">
-    <div class="card p-4 shadow-lg text-center">
-        <h2 class="mb-4">Trade: {{ stock.ticker }} - {{ stock.name }}</h2>
-        <p class="mb-3">
-            Current Price: 
-            <strong>${{ "%.2f"|format(stock.currentMarketPrice) }}</strong>
-        </p>
-
-        {% if owned_qty > 0 %}
-            <p class="text-info">You currently own <strong>{{ owned_qty }}</strong> shares.</p>
-        {% endif %}
-
-        <form method="POST" action="{{ url_for('trade', ticker=stock.ticker) }}">
-            <div class="mb-3">
-                <label for="quantity" class="form-label">Quantity</label>
-                <input 
-                    type="number" 
-                    id="quantity" 
-                    name="quantity" 
-                    class="form-control w-50 mx-auto" 
-                    min="1"
-                    value="{{ quantity if quantity else '' }}"
-                    required>
+    <h2>{{ stock.name }} ({{ stock.ticker }})</h2>
+    <div class="card p-3">
+        <p>Current Price: ${{ "%.2f"|format(stock.currentMarketPrice) }}</p>
+        <p>Available: {{ stock.quantity }}</p>
+        <form method="POST">
+            <div class="mb-2">
+                <label>Action</label>
+                <select name="action" class="form-control">
+                    <option>BUY</option>
+                    <option>SELL</option>
+                </select>
             </div>
-
-            <div class="d-flex justify-content-center gap-3">
-                <button type="submit" name="action" value="BUY" class="btn btn-success"
-                        {% if action == "SELL" %}disabled{% endif %}>
-                    Buy
-                </button>
-                <button type="submit" name="action" value="SELL" class="btn btn-danger"
-                        {% if action == "BUY" %}disabled{% endif %}>
-                    Sell
-                </button>
-                <a href="{{ url_for('profile') }}" class="btn btn-secondary">
-                    Cancel
-                </a>
+            <div class="mb-2">
+                <label>Quantity</label>
+                <input type="number" name="quantity" class="form-control" min="1" required>
+            </div>
+            <div class="mb-2">
+                <button class="btn btn-primary" type="submit">Place Order</button>
+                <a href="{{ url_for('market') }}" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>
+    {% if owned_qty %}
+    <div class="mt-3">
+        <p>Your holdings: {{ owned_qty }} shares</p>
+        {% if avg_price %}
+        <p>Average purchase price: ${{ avg_price }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
