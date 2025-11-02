@@ -87,29 +87,50 @@
 
     <!-- Calendar Events Section -->
     <div class="card mb-4">
-        <h4 class="mb-3">Calendar Events</h4>
-        <form method="POST" action="{{ url_for('calendar_add') }}" class="row g-2 mb-3">
-            <div class="col-md-4">
-                <input type="text" name="title" class="form-control" placeholder="Event Title" required>
-            </div>
-            <input type="hidden" name="description" value="">
-            <div class="col-md-3">
-                <input type="date" name="start_date" class="form-control" required>
-            </div>
-            <div class="col-md-2">
-                <input type="time" name="start_time" class="form-control" required>
-            </div>
-            <div class="col-md-3">
-                <input type="date" name="end_date" class="form-control">
-            </div>
-            <div class="col-md-2">
-                <input type="time" name="end_time" class="form-control">
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-primary w-100">Add Event</button>
-            </div>
-        </form>
-
+        <<form action="{{ url_for('calendar_add') }}" method="POST" class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" name="title" class="form-control" placeholder="Event Title" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="description" class="form-control" placeholder="Description (optional)">
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="start_date" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="start_time" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="end_date" class="form-control" placeholder="End Date">
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="end_time" class="form-control" placeholder="End Time">
+                </div>
+                <div class="col-md-2">
+                    <select name="event_type" class="form-control">
+                        <option value="event">Event</option>
+                        <option value="closed">Closed</option>
+                        <option value="custom_hours">Custom Hours</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="custom_open_time" class="form-control" placeholder="Custom Open Time">
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="custom_close_time" class="form-control" placeholder="Custom Close Time">
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="custom_open_time" class="form-control" placeholder="Custom Open Time">
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="custom_close_time" class="form-control" placeholder="Custom Close Time">
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">Add Event</button>
+                </div>
+            </form>
+        </div>
+    
         <div class="scroll-box" style="max-height: 400px; overflow-y: auto;">
             <table class="table table-bordered">
                 <thead>

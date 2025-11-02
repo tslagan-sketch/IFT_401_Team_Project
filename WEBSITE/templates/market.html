@@ -10,28 +10,28 @@
             <table class="table table-striped table-bordered" id="market-table">
                 <thead class="table-dark">
                     <tr>
-                        <th>Name</th>
-                        <th>Ticker</th>
-                        <th>Current Price</th>
-                        <th>Opening Price</th>
-                        <th>High (Today)</th>
-                        <th>Low (Today)</th>
-                        <th>Quantity</th>
-                        <th>Market Cap</th>
+                        <th style="color: white;">Name</th>
+                        <th style="color: white;">Ticker</th>
+                        <th style="color: white;">Current Price</th>
+                        <th style="color: white;">Opening Price</th>
+                        <th style="color: white;">High (Today)</th>
+                        <th style="color: white;">Low (Today)</th>
+                        <th style="color: white;">Quantity</th>
+                        <th style="color: white;">Market Cap</th>
                         <th>Buy</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for stock in stocks %}
                     <tr id="stock-{{ stock.ticker }}">
-                        <td>{{ stock.name }}</td>
-                        <td>{{ stock.ticker }}</td>
-                        <td class="current-price">${{ "%.2f"|format(stock.current_price) }}</td>
-                        <td class="open-price">${{ "%.2f"|format(stock.open_price) }}</td>
-                        <td class="high-price">${{ "%.2f"|format(stock.high_price) }}</td>
-                        <td class="low-price">${{ "%.2f"|format(stock.low_price) }}</td>
-                        <td class="quantity">{{ stock.quantity }}</td>
-                        <td class="market-cap">${{ "%.2f"|format(stock.market_cap) }}</td>
+                        <td style="color: white;">{{ stock.name }}</td>
+                        <td style="color: white;">{{ stock.ticker }}</td>
+                        <td style="color: white;" class="current-price">${{ "%.2f"|format(stock.current_price) }}</td>
+                        <td style="color: white;" class="open-price">${{ "%.2f"|format(stock.open_price) }}</td>
+                        <td style="color: white;" class="high-price">${{ "%.2f"|format(stock.high_price) }}</td>
+                        <td style="color: white;" class="low-price">${{ "%.2f"|format(stock.low_price) }}</td>
+                        <td style="color: white;" class="quantity">{{ stock.quantity }}</td>
+                        <td style="color: white;" class="market-cap">${{ "%.2f"|format(stock.market_cap) }}</td>
                         <td>
                             {% if stock.quantity > 0 %}
                             <form method="POST" action="{{ url_for('order_preview', ticker=stock.ticker) }}" class="d-flex gap-2">

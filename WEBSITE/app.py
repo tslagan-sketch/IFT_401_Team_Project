@@ -703,32 +703,44 @@ def calendar():
 @admin_required
 def calendar_add():
     title = request.form.get('title', '').strip()
-    desc = request.form.get('description', '').strip()
-    start = request.form.get('start_datetime')
-    end = request.form.get('end_datetime') or start
+    description = request.form.get('description', '').strip()
+    start_date = request.form.get('start_date')
+    start_time = request.form.get('start_time')
+    end_date = request.form.get('end_date') or start_date
+    end_time = request.form.get('end_time') or start_time
+    event_type = request.form.get('event_type', 'event')
+    custom_open_time = request.form.get('custom_open_time')
+    custom_close_time = request.form.get('custom_close_time')
 
-    if not title or not start:
-        flash("Title and start time are required.", "danger")
+    if not title or not start_date or not start_time:
+        flash("Title, start date, and start time are required.", "danger")
         return redirect(url_for('admin_console'))
 
     try:
-        start_dt = datetime.strptime(start, "%Y-%m-%dT%H:%M")
-        end_dt = datetime.strptime(end, "%Y-%m-%dT%H:%M")
+        start_dt = datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %H:%M")
+        end_dt = datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %H:%M")
+        custom_open = datetime.strptime(custom_open_time, "%H:%M").time() if custom_open_time else None
+        custom_close = datetime.strptime(custom_close_time, "%H:%M").time() if custom_close_time else None
     except ValueError:
-        flash("Invalid datetime format.", "danger")
+        flash("Invalid date or time format.", "danger")
         return redirect(url_for('admin_console'))
 
     evt = CalendarEvent(
         title=title,
-        description=desc,
+        description=description,
         start_datetime=start_dt,
         end_datetime=end_dt,
-        created_by=session.get('user_id')
+        created_by=session.get('user_id'),
+        event_type=event_type,
+        custom_open_time=custom_open,
+        custom_close_time=custom_close
     )
+
     db.session.add(evt)
     db.session.commit()
-    flash("Event added.", "success")
+    flash("Event added successfully.", "success")
     return redirect(url_for('admin_console'))
+
 
 @app.route('/calendar/remove/<int:event_id>', methods=['POST'])
 @admin_required

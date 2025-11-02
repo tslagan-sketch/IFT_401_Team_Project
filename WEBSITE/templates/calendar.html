@@ -6,15 +6,24 @@
     
     <div class="card mb-4">
         <div class="card-body">
-            <form action="{{ url_for('calendar') }}" method="POST" class="row g-3">
+            <form action="{{ url_for('calendar_add') }}" method="POST" class="row g-3">
                 <div class="col-md-3">
                     <input type="text" name="title" class="form-control" placeholder="Event Title" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="description" class="form-control" placeholder="Description (optional)">
                 </div>
                 <div class="col-md-2">
                     <input type="date" name="start_date" class="form-control" required>
                 </div>
                 <div class="col-md-2">
-                    <input type="date" name="end_date" class="form-control" placeholder="End Date (optional)">
+                    <input type="time" name="start_time" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="end_date" class="form-control" placeholder="End Date">
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="end_time" class="form-control" placeholder="End Time">
                 </div>
                 <div class="col-md-2">
                     <select name="event_type" class="form-control">
@@ -24,15 +33,14 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <input type="time" name="custom_open_time" class="form-control" placeholder="Open Time">
+                    <input type="time" name="custom_open_time" class="form-control" placeholder="Custom Open Time">
                 </div>
                 <div class="col-md-2">
-                    <input type="time" name="custom_close_time" class="form-control" placeholder="Close Time">
+                    <input type="time" name="custom_close_time" class="form-control" placeholder="Custom Close Time">
                 </div>
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary w-100">Add Event</button>
                 </div>
-                
             </form>
         </div>
     </div>
